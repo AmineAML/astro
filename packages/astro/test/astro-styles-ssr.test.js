@@ -10,25 +10,24 @@ before(async () => {
 });
 
 describe('Styles SSR', () => {
-  // TODO: convert <style> to <link>
-  // it('Has <link> tags', async () => {
-  //   const MUST_HAVE_LINK_TAGS = [
-  //     '/src/components/ReactCSS.css',
-  //     '/src/components/ReactModules.module.css',
-  //     '/src/components/SvelteScoped.css',
-  //     '/src/components/VueCSS.css',
-  //     '/src/components/VueModules.css',
-  //     '/src/components/VueScoped.css',
-  //   ];
+  it('Has <link> tags', async () => {
+    const MUST_HAVE_LINK_TAGS = [
+      '/src/components/ReactCSS.css',
+      '/src/components/ReactModules.module.css',
+      '/src/components/SvelteScoped.svelte',
+      '/src/components/VueCSS.vue',
+      '/src/components/VueModules.vue',
+      '/src/components/VueScoped.vue',
+    ];
 
-  //   const html = await fixture.readFile('/index.html');
-  //   const $ = cheerio.load(html);
+    const html = await fixture.readFile('/index.html');
+    const $ = cheerio.load(html);
 
-  //   for (const href of MUST_HAVE_LINK_TAGS) {
-  //     const el = $(`link[href="${href}"]`);
-  //     expect(el).to.have.lengthOf(1);
-  //   }
-  // });
+    for (const href of [...$('link[rel="stylesheet"]')].map((el) => el.attribs.href)) {
+      const hasTag = MUST_HAVE_LINK_TAGS.some((mustHaveHref) => href.includes(mustHaveHref));
+      expect(hasTag).to.equal(true);
+    }
+  });
 
   it('Has correct CSS classes', async () => {
     const html = await fixture.readFile('/index.html');
@@ -88,7 +87,7 @@ describe('Styles SSR', () => {
     expect(wrapper).to.have.lengthOf(1);
   });
 
-  // TODO: fix compiler bug
+  // TODO: add behavior in compiler
   it.skip('Astro scoped styles', async () => {
     const html = await fixture.readFile('/index.html');
     const $ = cheerio.load(html);
@@ -126,7 +125,7 @@ describe('Styles SSR', () => {
     expect($('#no-scope').attr('class')).to.equal(undefined);
   });
 
-  // TODO: fix compiler bug
+  // TODO: add behavior in compiler
   it.skip('Astro scoped styles can be passed to child components', async () => {
     const html = await fixture.readFile('/index.html');
     const $ = cheerio.load(html);

@@ -1,1 +1,1 @@
-export { AstroConfig, AstroUserConfig } from './astro-core';
+export { AstroConfig, AstroUserConfig } from './astro-core.js';
